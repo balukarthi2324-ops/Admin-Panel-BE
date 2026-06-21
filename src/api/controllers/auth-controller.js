@@ -10,17 +10,18 @@ module.exports.login = async(req,res)=>{
             let isValid = await ValidatePassword(password, user.password);
             if(isValid) {
                 let userDetails = {
-                    'id': adminDetails._id, "firstName": adminDetails.firstName, "lastName": adminDetails?.lastName, "email": adminDetails.email, "isAdminUser": adminDetails.isAdminUser, "userType": adminDetails.userType, 
+                    'id': user._id, "email": user.email, "phone": user.phone, "name": user.name 
                 }
                 const token =  await GenerateSignature({ userDetails});
-                let data = { adminDetails , token , userDetails}  
+                let data = { token , userDetails}  
+                 return res.status(200).send({ status: "ok", message: "Login Successfully", data: data});
             } else {
                 return res.status(403).send({ status: "ok", message: "Email or Password Incorrect" });
             }
         }
     
     } catch(error) {
-
+        console.log(error)
         return res.status(500).send({ status: "failed", message: "Login failed", "error": error });
 
     }
